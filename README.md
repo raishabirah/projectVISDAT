@@ -1,6 +1,5 @@
 # Kelompok 10: RAL 
 ---
-
 ## Contibutor 
 1. Raihan Shabirah (2108107010001) 
 2. Annisa Lathifa (2108107010088) 
