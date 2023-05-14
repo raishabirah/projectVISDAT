@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Color scale -->
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+<h3>
+  Rentang Nilai dan Kelompok Nilai Ujian Siswa
+</h3>
+
+<table border="1">
+  <tr>
+    <td>Nilai Huruf</td>
+    <td>Rentang Nilai</td>
+    <td>Keterangan</td>
+  </tr>
+  <tr>
+    <td>A</td>
+    <td>(90-100)</td>
+    <td>Lulus dengan Baik</td>
+  </tr>
+  <tr>
+    <td>B</td>
+    <td>(80-89)</td>
+    <td>Lulus</td>
+  </tr>
+  <tr>
+    <td>C</td>
+    <td>(70-79)</td>
+    <td>Lulus</td>
+  </tr>
+  <tr>
+    <td>D</td>
+    <td>(60-69)</td>
+    <td>Lulus</td>
+  </tr>
+  <tr>
+    <td>E</td>
+    <td>(59-0)</td>
+    <td>Tidak Lulus</td>
+  </tr>
+</table>
+
+<!-- Add 2 buttons -->
+
+<body>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+
+<script>
+
+  // set the dimensions and margins of the graph
+  var width = 500
+      height = 450
+      margin = 40
+  
+  // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+  var radius = Math.min(width, height) / 2 - margin
+  
+  // append the svg object to the div called 'my_dataviz'
+  var svg = d3.select("#my_dataviz")
+    .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+    .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+  
+  // create 2 data_set
+  var data1 = {A: 5, B: 15, C:26, D:26, E:28}
+  
+  // set the color scale
+  var color = d3.scaleOrdinal()
+    .domain(["A", "B", "C", "D", "E"])
+    .range(d3.schemeDark2);
+  
+  // A function that create / update the plot for a given variable:
+  function update(data) {
+  
+    // Compute the position of each group on the pie:
+    var pie = d3.pie()
+      .value(function(d) {return d.value; })
+      .sort(function(a) { console.log(a) ; return d3.ascending(a.key);} ) // This make sure that group order remains the same in the pie chart
+    var data_ready = pie(d3.entries(data))
+  
+    // map to data
+    var u = svg.selectAll("path")
+      .data(data_ready)
+  
+    // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+    u
+      .enter()
+      .append('path')
+      .merge(u)
+      .transition()
+      .duration(1000)
+      .attr('d', d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius)
+      )
+      .attr('fill', function(d){ return(color(d.data.key)) })
+      .attr("stroke", "white")
+      .style("stroke-width", "2px")
+      .style("opacity", 1)
+  
+    // remove the group that is not present anymore
+    u
+      .exit()
+      .remove()
+
+    // Create labels for each slice
+    var labels = svg.selectAll("text")
+      .data(data_ready);
+
+    labels.enter()
+      .append("text")
+      .merge(labels)
+      .transition()
+      .duration(1000)
+      .text(function(d) { 
+        var percent = ((d.data.value / d3.sum(Object.values(data))) * 100).toFixed(2);
+        return percent + "%"; 
+    })
+      .attr("transform", function(d) {
+    var pos = d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius)
+        .centroid(d);
+    return "translate(" + pos + ")";
+    })
+    .style("text-anchor", "middle")
+    .style("font-size", 14);
+
+    labels
+      .exit()
+      .remove();
+
+      // Create legend
+var legend = svg.selectAll(".legend")
+.data(color.domain())
+.enter()
+.append("g")
+.attr("class", "legend")
+.attr("transform", function(d, i) { return "translate(" + (-width/3 + i*75) + "," + (height/2 - margin+ 10) + ")"; });
+
+// Add colored squares to legend
+legend.append("rect")
+.attr("x", 0)
+.attr("width", 18)
+.attr("height", 18)
+.style("fill", color);
+
+// Add text to legend
+legend.append("text")
+.attr("x", 24)
+.attr("y", 9)
+.attr("dy", ".35em")
+.text(function(d) { return d; });
+
+
+  
+  }
+  
+  // Initialize the plot with the first dataset
+  update(data1)
+  
+  </script>
+</body>
+</html>
