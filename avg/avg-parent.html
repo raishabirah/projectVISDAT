@@ -53,7 +53,7 @@
                 "translate(" + margin.left + "," + margin.top + ")");
       
       // Get data
-      d3.csv("data/parental_average_test.csv").then(function(data) {
+      d3.csv("../data/parental_average_test.csv").then(function(data) {
       
         // // Format data
         // data.forEach(function(d) {
@@ -81,7 +81,16 @@
             .attr("y", function(d) { return y(d.average_test); })
             .attr("height", function(d) { return height - y(d.average_test); });
 
-            
+                    // Add labels for average_score
+        svg.selectAll(".bar-label")
+            .data(data)
+            .enter().append("text")
+            .attr("class", "bar-label")
+            .attr("x", function(d) { return x(d.level_of_education) + x.bandwidth() / 2; })
+            .attr("y", function(d) { return y(d.average_test) - 5; }) // Adjust the y position as needed
+            .attr("text-anchor", "middle")
+            .text(function(d) { return d.average_test; })
+            .attr("font-size", "11px");   
       
         // Add x axis
         svg.append("g")
