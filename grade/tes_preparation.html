@@ -45,7 +45,7 @@
   // set the color scale
   var color = d3.scaleOrdinal()
     .domain(["A", "B", "C", "D", "F"])
-    .range(d3.schemeSet2);
+    .range(["#a6cee3", "#1f78b4", "#b2df8a", "33a02c", "#e41a1c"]);
   
   // A function that create / update the plot for a given variable:
   function update(data) {
@@ -102,7 +102,8 @@
     return "translate(" + pos + ")";
     })
     .style("text-anchor", "middle")
-    .style("font-size", 14);
+    .style("font-size", 14)
+    .style("fill", "white");
 
     labels
       .exit()
