@@ -1,37 +1,35 @@
 <!DOCTYPE html>
-<html lang="en"></html>
-<head>
-  <meta charset="utf-8">
-  <!-- Load d3.js -->
-  <script src="https://d3js.org/d3.v4.js"></script>
-  <!-- Color scale -->
-  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-</head>
+<meta charset="utf-8">
 
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
 
+<!-- Color scale -->
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
 <body>
-
-<!-- Add 5 buttons -->
-<div class="ms-4 btn-group" >
-    <button class="btn btn-secondary" onclick="update(bachelor)">Bachelor's Degree</button>
-    <button class="btn btn-secondary" onclick="update(master)">Master's Degree</button>
-    <button class="btn btn-secondary" onclick="update(some_college)">Some Collage</button>
-    <button class="btn btn-secondary" onclick="update(associate)">Associate's Degree</button>
-    <button class="btn btn-secondary" onclick="update(high_school)">High School</button>
-    <button class="btn btn-secondary" onclick="update(some_high_school)">Some High School</button>
-
-</div>
+  <h1 class="text-center">Persentase Ras/Etnis Siswa</h3>
+  
+  <!-- Add 5 buttons -->
+  <div class="ms-4 btn-group">
+    <a href="persentase_gender.html" class="btn btn-secondary">Gender</a>
+    <a href="persentase_lunch.html" class="btn btn-secondary">Lunch</a>
+    <a href="persentase_parental_education.html" class="btn btn-secondary">Parent</a>
+    <a href="persentase_ras_etnis.html" class="btn btn-secondary">Race</a>
+    <a href="persentase_tes_preparation.html" class="btn btn-secondary">Test</a>
+    <a href="../index.html" class="btn btn-secondary">Kembali</a>
+  </div>
 
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 
 <script>
+
   // set the dimensions and margins of the graph
-  var width = 450
-      height = 450
-      margin = 40
+  var width = 1000
+      height = 600
+      margin = 50
   
   // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
   var radius = Math.min(width, height) / 2 - margin
@@ -45,17 +43,12 @@
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
   
   // create 2 data_set
-  var bachelor = {A: 13, B: 18, C:35, D:31, F:21}
-  var some_college = {A: 11, B: 35, C:62, D:63, F:55}
-  var master = {A: 6, B: 14, C:16, D:13, F:10}
-  var associate = {A: 16, B: 35, C:59, D:53, F:59}
-  var high_school = {A: 2, B: 18, C:45, D:55, F:76}
-  var some_high_school = {A: 4, B: 26, C:44, D:41, F:64}
-
+  var data1 = {Group_A: 89, Group_B: 190, Group_C:319, Group_D:262, Group_E:140}
+  
   // set the color scale
   var color = d3.scaleOrdinal()
-    .domain(["A", "B", "C", "D", "F"])
-    .range(d3.schemeSet2);
+    .domain(["Group_A", "Group_B", "Group_C", "Group_D", "Group_E"])
+    .range(d3.schemeDark2);
   
   // A function that create / update the plot for a given variable:
   function update(data) {
@@ -63,7 +56,7 @@
     // Compute the position of each group on the pie:
     var pie = d3.pie()
       .value(function(d) {return d.value; })
-      .sort(function(a, b) { console.log(a) ; return d3.ascending(a.key, b.key);} ) // This make sure that group order remains the same in the pie chart
+      .sort(function(a) { console.log(a) ; return d3.ascending(a.key);} ) // This make sure that group order remains the same in the pie chart
     var data_ready = pie(d3.entries(data))
   
     // map to data
@@ -118,36 +111,35 @@
       .exit()
       .remove();
 
-    // Remove existing legend
-    svg.selectAll(".legend").remove();
-
       // Create legend
-    var legend = svg.selectAll(".legend")
-    .data(color.domain())
-    .enter()
-    .append("g")
-    .attr("class", "legend")
-    .attr("transform", function(d, i) { return "translate(" + (-width/3 + i*70) + "," + (height/2 - margin+ 10) + ")"; });
+var legend = svg.selectAll(".legend")
+.data(color.domain())
+.enter()
+.append("g")
+.attr("class", "legend")
+.attr("transform", function(d, i) { return "translate(" + (-width/3 + i*150) + "," + (height/2 - margin+ 10) + ")"; });
 
-    // Add colored squares to legend
-    legend.append("rect")
-    .attr("x", 0)
-    .attr("width", 18)
-    .attr("height", 18)
-    .style("fill", color);
+// Add colored squares to legend
+legend.append("rect")
+.attr("x", 0)
+.attr("width", 18)
+.attr("height", 18)
+.style("fill", color);
 
-    // Add text to legend
-    legend.append("text")
-    .attr("x", 24)
-    .attr("y", 9)
-    .attr("dy", ".35em")
-    .text(function(d) { return d; });
+// Add text to legend
+legend.append("text")
+.attr("x", 24)
+.attr("y", 9)
+.attr("dy", ".35em")
+.text(function(d) { return d; });
+
+
   
   }
   
   // Initialize the plot with the first dataset
-  update(bachelor)
+  update(data1)
+  
   </script>
-  </div>
 </body>
 </html>

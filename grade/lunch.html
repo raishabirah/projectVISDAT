@@ -7,15 +7,16 @@
 <!-- Color scale -->
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
+
 <h3>
-  Presentase Ras/Etnis Siswa
+  Nilai Ujian Berdasarkan Lunch
 </h3>
 
-
-
-<!-- Add 2 buttons -->
-
 <body>
+<!-- Add 2 buttons -->
+<button onclick="update(data1)">standard</button>
+<button onclick="update(data2)">free/reduced</button>
+
 
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
@@ -23,9 +24,9 @@
 <script>
 
   // set the dimensions and margins of the graph
-  var width = 1000
-      height = 600
-      margin = 50
+  var width = 450
+      height = 450
+      margin = 40
   
   // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
   var radius = Math.min(width, height) / 2 - margin
@@ -39,11 +40,12 @@
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
   
   // create 2 data_set
-  var data1 = {Group_A: 89, Group_B: 190, Group_C:319, Group_D:262, Group_E:140}
+  var data1 = {A:48 , B: 111, C:190, D:166, E:130}
+  var data2 = {A: 4, B: 35, C:71, D:90, E:155}
   
   // set the color scale
   var color = d3.scaleOrdinal()
-    .domain(["Group_A", "Group_B", "Group_C", "Group_D", "Group_E"])
+    .domain(["A", "B", "C", "D", "E"])
     .range(d3.schemeDark2);
   
   // A function that create / update the plot for a given variable:
@@ -52,7 +54,7 @@
     // Compute the position of each group on the pie:
     var pie = d3.pie()
       .value(function(d) {return d.value; })
-      .sort(function(a) { console.log(a) ; return d3.ascending(a.key);} ) // This make sure that group order remains the same in the pie chart
+      .sort(function(a, b) { console.log(a) ; return d3.ascending(a.key, b.key);} ) // This make sure that group order remains the same in the pie chart
     var data_ready = pie(d3.entries(data))
   
     // map to data
@@ -107,13 +109,16 @@
       .exit()
       .remove();
 
+      // Remove existing legend
+    svg.selectAll(".legend").remove();
+
       // Create legend
 var legend = svg.selectAll(".legend")
 .data(color.domain())
 .enter()
 .append("g")
 .attr("class", "legend")
-.attr("transform", function(d, i) { return "translate(" + (-width/3 + i*150) + "," + (height/2 - margin+ 10) + ")"; });
+.attr("transform", function(d, i) { return "translate(" + (-width/3 + i*70) + "," + (height/2 - margin+ 10) + ")"; });
 
 // Add colored squares to legend
 legend.append("rect")
