@@ -7,14 +7,16 @@
 <!-- Color scale -->
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
+
 <h3>
   Nilai Ujian Berdasarkan Lunch
 </h3>
+
+<body>
 <!-- Add 2 buttons -->
 <button onclick="update(data1)">standard</button>
 <button onclick="update(data2)">free/reduced</button>
 
-<body>
 
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
@@ -106,6 +108,9 @@
     labels
       .exit()
       .remove();
+
+      // Remove existing legend
+    svg.selectAll(".legend").remove();
 
       // Create legend
 var legend = svg.selectAll(".legend")
