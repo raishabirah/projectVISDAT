@@ -9,15 +9,16 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
 <body>
-<h1 class="text-center">Presentase Jenis Kelamin Siswa</h1>
+  <h1 class="text-center">Persentase Ras/Etnis Siswa</h3>
   
   <!-- Add 5 buttons -->
   <div class="ms-4 btn-group">
-    <a href="presentase_gender.html" class="btn btn-secondary">Gender</a>
-    <a href="presentase_lunch.html" class="btn btn-secondary">Lunch</a>
-    <a href="presentase_parental_education.html" class="btn btn-secondary">Parent</a>
-    <a href="presentase_ras_etnis.html" class="btn btn-secondary">Race</a>
-    <a href="presentase_tes_preparation.html" class="btn btn-secondary">Test</a>
+    <a href="persentase_gender.html" class="btn btn-secondary">Gender</a>
+    <a href="persentase_lunch.html" class="btn btn-secondary">Lunch</a>
+    <a href="persentase_parental_education.html" class="btn btn-secondary">Parent</a>
+    <a href="persentase_ras_etnis.html" class="btn btn-secondary">Race</a>
+    <a href="persentase_tes_preparation.html" class="btn btn-secondary">Test</a>
+    <a href="../index.html" class="btn btn-secondary">Kembali</a>
   </div>
 
 <!-- Create a div where the graph will take place -->
@@ -26,9 +27,9 @@
 <script>
 
   // set the dimensions and margins of the graph
-  var width = 500
-      height = 450
-      margin = 40
+  var width = 1000
+      height = 600
+      margin = 50
   
   // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
   var radius = Math.min(width, height) / 2 - margin
@@ -42,11 +43,11 @@
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
   
   // create 2 data_set
-  var data1 = {standard: 645, free: 355}
+  var data1 = {Group_A: 89, Group_B: 190, Group_C:319, Group_D:262, Group_E:140}
   
   // set the color scale
   var color = d3.scaleOrdinal()
-    .domain(["standard", "free"])
+    .domain(["Group_A", "Group_B", "Group_C", "Group_D", "Group_E"])
     .range(d3.schemeDark2);
   
   // A function that create / update the plot for a given variable:
@@ -116,7 +117,7 @@ var legend = svg.selectAll(".legend")
 .enter()
 .append("g")
 .attr("class", "legend")
-.attr("transform", function(d, i) { return "translate(" + (-width/6 + i*90) + "," + (height/2 - margin+ 10) + ")"; });
+.attr("transform", function(d, i) { return "translate(" + (-width/3 + i*150) + "," + (height/2 - margin+ 10) + ")"; });
 
 // Add colored squares to legend
 legend.append("rect")
